@@ -29,31 +29,6 @@ function checkAjax(script)
 	return XHR.responseText;
 }
 
-function readCookie(name) {
-	var nameEQ = name + "=";
-	var ca = document.cookie.split(';');
-	for(var i=0;i < ca.length;i++) {
-		var c = ca[i];
-		while (c.charAt(0)==' ') c = c.substring(1,c.length);
-		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-	}
-	return null;
-}
-
-function createCookie(name,value,days) {
-	var expires = "";
-	if (days) {
-		var date = new Date();
-		date.setTime(date.getTime()+(days*24*60*60*1000));
-		expires = "; expires="+date.toGMTString();
-	}
-	document.cookie = name+"="+value+expires+"; path=/";
-}
-
-function eraseCookie(name) {
-	createCookie(name,"",-1);
-}
-
 function removeChildrenById(id)
 {
 	var element = document.getElementById(id);
@@ -356,19 +331,22 @@ function main()
 	window.customHistoryIndex = 0;
 	window.customHistory[window.customHistoryIndex] = url;
 	
-	var app = new App();
-	app.loadUI();
-	app.notify("Notification d'ouverture", "Bienvenue sur sur l'application desktop des emplois du temps de Bordeaux 1 !", 20, null)
-	if(!app.createConfigDirectory())
-		app.notify("Erreur", "Le dossier "+app.configDirectory+" n'a pas pu être créé", 200, null)
+	window.app = new App();
+	window.app.loadUI();
+	window.app.notify("Notification d'ouverture", "Bienvenue sur sur l'application desktop des emplois du temps de Bordeaux 1 !", 20, null)
+	if(!window.app.createConfigDirectory())
+		window.app.notify("Erreur", "Le dossier "+window.app.configDirectory+" n'a pas pu être créé", 20, null);
 	else
-		app.notify("Succès", "Le dossier "+app.configDirectory+" a été créé", 200, null)
+	{
+		console.log("test");
+		window.app.notify("Votre groupe :", window.app.readConfig(), 20, null);
+	}
 	
 	if(url != null && url != "")
 	{
 		ajax(url);
 	}
-	else if(readCookie('classHackjack') != null)
+	else if(window.app.readConfig() != null)
 	{
 		var XHR   = getXMLHttpRequest();
 		XHR.onreadystatechange = function() {
@@ -377,15 +355,15 @@ function main()
 				var reponse = XHR.responseText;
 				if(reponse == 'OK')
 				{
-					cookie = readCookie('classHackjack');
+					cookie = window.app.readConfig();
 					url_base ="type=day&name="+cookie.replace("_","&group=");
 					ajax(url_base);
 				}
 				else
-					eraseCookie('classHackjack');
+					window.app.deleteConfig();
 			}
 		};
-		XHR.open("GET", "http://hackjack.info/et/ajax.php?type=checkCookie&request="+readCookie('classHackjack'), true);
+		XHR.open("GET", "http://hackjack.info/et/ajax.php?type=checkCookie&request="+window.app.readConfig(), true);
 		XHR.send(null);
     
 	}
