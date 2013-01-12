@@ -7,10 +7,6 @@ html
     background-color:#B1B1B1;
 }
 
-body::-webkit-scrollbar { 
-    display: none; 
-}
-
 body
 {
     background-color:#ececec;
@@ -62,6 +58,7 @@ div.topbar .section
     background-image:url('images/grey_dot.png');
     background-repeat:repeat-y;
     background-position:100% 0%;
+	cursor:pointer;
 }
 
 div.topbar .section:first-child
@@ -163,15 +160,12 @@ header h1.percent50
     font-size:1.8em;
 }
 
-div.groupes
+#test a
 {
-    color:black;
     text-align:left;
     font-size:1.2em;
-    padding-top:10px;
-    padding-bottom:10px;
+    padding:10px 2%;
     display:block;
-    width:95%;
     margin:0 auto;
     border-bottom:1px gray solid;
     background-image:url('images/next.png');
@@ -179,16 +173,24 @@ div.groupes
     background-position:98% 50%;
 }
 
-div.groupes a,div.groupes a:hover,div.groupes a:focus,div.groupes a:visited
+#test a:before,#test a:after
 {
-    margin-left:32px;
-    color:black;
-    text-decoration:none;
+    display:table;
+    content:"";
+    zoom:1;
+    *display:inline;
 }
 
-div.groupes h3
+#test a:after
 {
-    margin:0 0;
+    clear:both;
+}
+
+#test a, #test a:hover, #test a:focus, #test a:visited
+{
+    margin-left:2%;
+    color:black;
+    text-decoration:none;
 }
 
 div.liens
@@ -197,42 +199,34 @@ div.liens
     text-align:center;
 }
 
-.serie
-{
-    margin-top:20px;
-}
-
-div.lettre h1
+.lettre
 {
     text-align:center;
     font-size:5em;
     color:black;
     font-family:"Times New Roman",serif;
     margin:0;
-}
-
-div.lettre
-{
     margin-top:10px;
 }
 
-div.lettre:first-child
+.lettre:first-child
 {
     margin-top:0;
 }
 
-div.lettre + .serie
+.lettre + .serie
 {
     margin-top:0;
 }
 
-div.serie h3
+h3.serie
 {
-    margin:0 auto;
-    width:95%;
-    text-align:left;
-    color:deepSkyBlue;
-    border-bottom:solid 2px deepSkyBlue;
+    padding-left: 2%;
+    margin:20px 0 0 0;
+	text-align: left;
+	color: deepSkyBlue;
+	border-bottom: solid 2px deepSkyBlue;
+	font-size: 1.3em;
 }
 
 a.index
@@ -355,6 +349,11 @@ span.help
 a.next
 {
     float:right;
+}
+
+#previous, div#next
+{
+	cursor: pointer;
 }
 
 a.previous
