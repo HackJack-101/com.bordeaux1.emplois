@@ -28,6 +28,18 @@ local.properties
 # PDT-specific
 .buildpath
 
+#################
+## TideSDK
+#################
+
+packages/
+dist/
+
+#################
+## NetBeans
+#################
+
+nbproject/
 
 #################
 ## Visual Studio
