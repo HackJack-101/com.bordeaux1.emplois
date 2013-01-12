@@ -1,11 +1,6 @@
 function getSelectValue(selectId)
 {
-    /**On récupère l'élement html <select>*/
     var selectElmt = document.getElementById(selectId);
-    /**
-	selectElmt.options correspond au tableau des balises <option> du select
-	selectElmt.selectedIndex correspond à l'index du tableau options qui est actuellement sélectionné
- */
     return selectElmt.options[selectElmt.selectedIndex].value;
 }
 
@@ -33,9 +28,8 @@ function loadAjax(script,id)
 function removeChildrenById(id)
 {
     var element = document.getElementById(id);
-    while (element.firstChild) {
+    while (element.firstChild)
         element.removeChild(element.firstChild);
-    }
 }
 
 function getXMLHttpRequest() 
@@ -45,25 +39,20 @@ function getXMLHttpRequest()
     {
         if (window.ActiveXObject) 
         {
-            try 
-            {
+            try
+			{
                 xhr = new ActiveXObject("Msxml2.XMLHTTP");
-            } 
-            catch(e) 
-            {
+			}
+            catch(e)
+			{
                 xhr = new ActiveXObject("Microsoft.XMLHTTP");
-            }
+			}
         } 
         else 
-        {
-            xhr = new XMLHttpRequest(); 
-        }
-    } 
-    else 
-    {
-        alert("Votre navigateur ne supporte pas l'objet XMLHTTPRequest...");
-        return null;
+            xhr = new XMLHttpRequest();
     }
+    else 
+        alert("Votre navigateur ne supporte pas l'objet XMLHTTPRequest...");
     return xhr;
 }
 
@@ -86,7 +75,7 @@ window.addEventListener('load', function()
         {
             window.app.writeConfig(getSelectValue('select'));
             removeChildrenById('annonce');
-            var annonce = 'Ton groupe de TD '+ getSelectText('select') +' a bien été pris en compte.';
+            var annonce = 'Ton groupe de TD "'+ getSelectText('select') +'" a bien été pris en compte.<br/>Il suffit de cliquer sur "Programme > Accueil".';
             document.getElementById('annonce').innerHTML = annonce;
         }
     }

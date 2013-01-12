@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <ti:app xmlns:ti='http://ti.appcelerator.org'>
-	<id>com.bordeaux1.emplois</id>
-	<name>Edt Bordeaux 1</name>
-	<version>0.90</version>
-	<publisher>J_ck3113</publisher>
-	<url>http//hackjack.info</url>
-	<icon>apple-touch-icon-114x114.png</icon>
-	<copyright>2013 by J_ck3113 (copyleft)</copyright>
+<id>com.bordeaux1.emplois</id>
+<name>EdTBordeaux1</name>
+<version>0.90</version>
+<publisher>J_ck3113</publisher>
+<url>http://hackjack.info</url>
+<icon>icon.png</icon>
+<copyright>2013 by J_ck3113 (copyleft)</copyright>
 	<!-- Window Definition - these values can be edited -->
 	<window>
 		<id>initial</id>

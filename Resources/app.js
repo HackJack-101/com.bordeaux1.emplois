@@ -2,7 +2,8 @@ function App()
 {
 	this.configDirectory = Ti.Filesystem.getDocumentsDirectory()+Ti.Filesystem.getSeparator()+'EdT Bordeaux 1';
 	this.configFile = this.configDirectory+Ti.Filesystem.getSeparator()+'config';
-	this.exeFile = Ti.Filesystem.getApplicationDirectory()+Ti.Filesystem.getSeparator()+'Edt Bordeaux 1.exe';
+	this.exeFile = Ti.App.getPath();
+	this.menu = Ti.UI.createMenu();
 	
 	if(typeof App.initialized == "undefined")
 	{
@@ -80,14 +81,35 @@ function App()
 				return null;
 		};
 		
+		App.prototype.setTitle = function (title)
+		{
+			Ti.UI.getCurrentWindow().setTitle(title);
+		};
+		
+		App.prototype.addExport = function (code)
+		{
+			if(this.menu.getLength() > 3)
+				this.menu.removeItemAt(3);
+
+			var exportItem = Ti.UI.createMenuItem('Exporter');
+			googleCalItem = exportItem.addItem('Google Agenda', function() {
+				Ti.Platform.openURL('https://www.google.com/calendar/render?cid=http://www.hackjack.info/et/'+ code +'/gcal');
+			});
+			iCalItem = exportItem.addItem('iCalendar', function() {
+				Ti.Platform.openURL('http://www.hackjack.info/et/'+ code +'/ical');
+			});
+			this.menu.appendItem(exportItem);
+
+			Ti.UI.setMenu(this.menu);
+		};
+		
 		App.prototype.loadUI = function ()
 		{
-			var menu = Ti.UI.createMenu();
-			
-			programItem = Ti.UI.createMenuItem('Programme');
+			var programItem = Ti.UI.createMenuItem('Programme');
 			homeItem = programItem.addItem('Accueil', function() {
 				Ti.UI.getCurrentWindow().setURL('app://index.html');
 			});
+			programItem.addSeparatorItem();
 			restartItem = programItem.addItem('Redémarrer', function() {
 				if (confirm('Êtes vous sûr de vouloir redémarrer ?')) {
 					Ti.App.restart();
@@ -98,18 +120,44 @@ function App()
 					Ti.App.exit();
 				}
 			});
-			menu.appendItem(programItem);
+			this.menu.appendItem(programItem);
 			
-			optionsItem = Ti.UI.createMenuItem('Options');
+			var optionsItem = Ti.UI.createMenuItem('Options');
 			settingsItem = optionsItem.addItem('Configuration', function() {
 				Ti.UI.getCurrentWindow().setURL('app://settings.html');
 			});
-			testItem = optionsItem.addItem('Test', function() {
-				Ti.UI.getCurrentWindow().setURL('app://test.html');
+			optionsItem.addSeparatorItem();
+			siteItem = optionsItem.addItem('Accéder au site', function() {
+				Ti.Platform.openURL(Ti.App.getURL());
 			});
-			menu.appendItem(optionsItem);
+			aboutItem = optionsItem.addItem('À propos', function() {
+				alert(Ti.App.getName()+" v."+Ti.App.getVersion()
+					+"\nCopyright : "+Ti.App.getCopyright()
+					+"\nDéveloppeur : "+Ti.App.getPublisher()
+					+"\nEmplacement : "+Ti.App.getPath()
+					+"\nSystème : "+Ti.Platform.getName()+" ("+Ti.Platform.getOSType()+")");
+			});
+			this.menu.appendItem(optionsItem);
 			
-			Ti.UI.setMenu(menu);
+			var linksItem = Ti.UI.createMenuItem('Liens externes');
+			entItem = linksItem.addItem('ENT Bordeaux 1', function() {
+				Ti.Platform.openURL('http://ent.u-bordeaux1.fr/');
+			});
+			groupsItem = linksItem.addItem('Groupes de TD', function() {
+				Ti.Platform.openURL('https://apps1.drimm.u-bordeaux1.fr/groupesetu/');
+			});
+			webmailItem = linksItem.addItem('Boite mail', function() {
+				Ti.Platform.openURL('https://sogo.u-bordeaux1.fr/SOGo/');
+			});
+			newsgroupItem = linksItem.addItem('Newsgroups', function() {
+				Ti.Platform.openURL('https://apps1.drimm.u-bordeaux1.fr/Web-News/newsgroups.php');
+			});
+			schoolItem = linksItem.addItem('Portail de scolarité', function() {
+				Ti.Platform.openURL('https://www.apogee-bordeaux1.u-bordeaux.fr/');
+			});
+			this.menu.appendItem(linksItem);
+			
+			Ti.UI.setMenu(this.menu);
 		};
 		
 		App.prototype.notify = function(title, message,timeout,icon)
@@ -123,7 +171,6 @@ function App()
 			notification.show();
 		};
 		
-		
 		App.prototype.notifyCallback = function(title, message,timeout,callback,icon)
 		{
 			var notification = Ti.Notification.createNotification({
@@ -136,9 +183,7 @@ function App()
 			notification.show();
 		};
 		
-		
 		App.initialized = true;
-	
-	
+
 	}
 }

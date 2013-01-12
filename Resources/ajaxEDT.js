@@ -15,11 +15,11 @@ function loadAjax(script,id)
 
 function checkAjax(script)
 {
-	var XHR   = getXMLHttpRequest();
-    
+	var XHR = getXMLHttpRequest();
+
 	XHR.onreadystatechange = function() {
 		if (XHR.readyState == 4 && (XHR.status == 200 || XHR.status == 0)) 
-		{	
+		{
 			var reponse = XHR.responseText;
 			return reponse;
 		}
@@ -135,9 +135,6 @@ function checkDeplacement(e)
 
 function historyManager(action,href)
 {
-	// console.log(window.customHistory);
-	// console.log(window.customHistoryIndex);
-	// console.log(window.customHistory[window.customHistoryIndex]);
 	switch(action)
 	{
 		case 'previous':
@@ -169,27 +166,28 @@ function historyManager(action,href)
 				history.pushState( href, 'Emplois du temps Bordeaux 1', "index.html?" + href);
 			}
 			break;
-		
 	}
 }
 
-function ajax(href) 
+function ajax(href)
 {
 	if(href == "")
 	{
 		loadAjax("http://hackjack.info/et/ajax.php?request=topbar","topbar");
 		loadAjax("http://hackjack.info/et/ajax.php?request=header","header");
 		removeChildrenById('menu');
+		window.app.setTitle("Liste - EdT Bordeaux I");
 	}
 	else
 	{
 		loadAjax("http://hackjack.info/et/ajax.php?request=topbar&" + href,"topbar");
 		loadAjax("http://hackjack.info/et/ajax.php?request=header&" + href,"header");
 		var regUrl = new RegExp('.+name=([A-Z0-9]+)&group=([A-Z0-9]+).*', 'i');
-		document.getElementById('menu').innerHTML = '\n<li data-href="#"><a href="https://www.google.com/calendar/render?cid=http://www.hackjack.info/et/'+ href.replace(regUrl,"$1_$2") +'/gcal">Google Agenda</a> \n<li data-href="#"><a href="http://www.hackjack.info/et/'+ href.replace(regUrl,"$1_$2") +'/ical">iCalendar</a></li>';
+		window.app.addExport(href.replace(regUrl,"$1_$2"));
+		window.app.setTitle(href.replace(regUrl,"$1 $2") + " - EdT Bordeaux I");
 	}
-    
-	var listXHR   = getXMLHttpRequest();
+
+	var listXHR = getXMLHttpRequest();
 	listXHR.onreadystatechange = function() {
 		if (listXHR.readyState == 4 && (listXHR.status == 200 || listXHR.status == 0))
 		{	
@@ -211,9 +209,10 @@ function ajax(href)
 						ajax(href);
 						return false;
 					}
+					return true;
 				};
 			}
-			
+
 			groupes = document.getElementsByClassName('groupes');
 			for(var i = 0; i < groupes.length ; i++)
 			{
@@ -225,7 +224,7 @@ function ajax(href)
 					href = this.getElementsByTagName('a')[0].getAttribute('href');
 					historyManager('click',href);
 					ajax(href);
-				};        
+				};
 			}
 			section = document.getElementsByClassName('section');
 			for(var j = 0; j < section.length ; j++)
@@ -282,7 +281,7 @@ function ajax(href)
 			{
 				menuLinks[m].onclick = function() {
 					window.location.href = this.getAttribute('data-href');
-				}
+				};
 			}
 			
 			if(next = document.getElementById('next'))
@@ -294,26 +293,19 @@ function ajax(href)
 			if(document.getElementById('next'))
 			{
 				window.addEventListener('touchstart', checkStartGesture, false);
-				//window.addEventListener('mousedown', checkStartGesture, false);
-				//window.addEventListener('touchmove', checkMoveGesture, false);
+				window.addEventListener('mousedown', checkStartGesture, false);
+				window.addEventListener('touchmove', checkMoveGesture, false);
 				window.addEventListener('touchend', checkEndGesture, false);
-			//window.addEventListener('mouseup', checkEndGesture, false);
-			}	    
-
+				window.addEventListener('mouseup', checkEndGesture, false);
+			}
 		}
-		else if (listXHR.readyState < 4) 
-		{
+		else if (listXHR.readyState < 4)
 			document.getElementById('loader').style.display = 'block';
-		}
 	};
 	if(href == "")
-	{
-		listXHR.open("GET", "http://hackjack.info/et/ajax.php?request=corps", true);  
-	}
+		listXHR.open("GET", "http://hackjack.info/et/ajax.php?request=corps", true);
 	else
-	{
 		listXHR.open("GET", "http://hackjack.info/et/ajax.php?request=corps&" + href, true);
-	}
 	listXHR.send(null);
 }
 
@@ -322,30 +314,18 @@ function main()
 	var startX = 0;
 	var startY = 0;
 
-
 	var url_base ="";
 	var url = window.location.search.replace("?","");
-	
-	
+
 	window.customHistory = new Array();
 	window.customHistoryIndex = 0;
 	window.customHistory[window.customHistoryIndex] = url;
-	
+
 	window.app = new App();
 	window.app.loadUI();
-	window.app.notify("Notification d'ouverture", "Bienvenue sur sur l'application desktop des emplois du temps de Bordeaux 1 !", 20, null)
-	if(!window.app.createConfigDirectory())
-		window.app.notify("Erreur", "Le dossier "+window.app.configDirectory+" n'a pas pu être créé", 20, null);
-	else
-	{
-		console.log("test");
-		window.app.notify("Votre groupe :", window.app.readConfig(), 20, null);
-	}
 	
 	if(url != null && url != "")
-	{
 		ajax(url);
-	}
 	else if(window.app.readConfig() != null)
 	{
 		var XHR   = getXMLHttpRequest();
@@ -374,6 +354,13 @@ function main()
 
 
 window.addEventListener('load',main, true);
+window.addEventListener('load',function()
+{
+	setTimeout(function(){
+		if(window.app.readConfig()==null)
+			window.app.notify("EdT Bordeaux I","Pour une utilisation optimale, allez dans \"Options > Configuration\" et paramétrez votre groupe de TD.",20,null);
+	},3000);
+}, true);
 
 
 window.addEventListener('hashchange', function()
