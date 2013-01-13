@@ -2,7 +2,7 @@
 <ti:app xmlns:ti='http://ti.appcelerator.org'>
 <id>com.bordeaux1.emplois</id>
 <name>EdTBordeaux1</name>
-<version>0.90</version>
+<version>0.91</version>
 <publisher>J_ck3113</publisher>
 <url>http://hackjack.info</url>
 <icon>icon.png</icon>
