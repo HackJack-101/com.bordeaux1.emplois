@@ -98,6 +98,10 @@ function App()
 			iCalItem = exportItem.addItem('iCalendar', function() {
 				Ti.Platform.openURL('http://www.hackjack.info/et/'+ code +'/ical');
 			});
+			exportItem.addSeparatorItem();
+			urlItem = exportItem.addItem('URL', function() {
+				Ti.Platform.openURL('http://www.hackjack.info/et/'+ code +'/s');
+			});
 			this.menu.appendItem(exportItem);
 
 			Ti.UI.setMenu(this.menu);
