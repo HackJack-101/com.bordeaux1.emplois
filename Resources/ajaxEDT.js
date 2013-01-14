@@ -323,6 +323,7 @@ function main()
 
 	window.app = new App();
 	window.app.loadUI();
+	window.app.createConfigDirectory();
 	
 	if(url != null && url != "")
 		ajax(url);
