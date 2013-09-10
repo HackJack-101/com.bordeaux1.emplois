@@ -33,7 +33,7 @@ function App()
 		App.prototype.deleteFile = function (filepath)
 		{
 			var file = Ti.Filesystem.getFile(filepath);
-			if(file.exist())
+			if(file.exists())
 				return file.deleteFile();
 			return false;
 		}

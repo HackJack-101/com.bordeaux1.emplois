@@ -283,7 +283,6 @@ function ajax(href)
 					window.location.href = this.getAttribute('data-href');
 				};
 			}
-			
 			if(next = document.getElementById('next'))
 				next_href = next.getAttribute('data-href');
 			if(previous = document.getElementById('previous'))
@@ -329,10 +328,10 @@ function main()
 		ajax(url);
 	else if(window.app.readConfig() != null)
 	{
-		var XHR   = getXMLHttpRequest();
+		var XHR = getXMLHttpRequest();
 		XHR.onreadystatechange = function() {
 			if (XHR.readyState == 4 && (XHR.status == 200 || XHR.status == 0)) 
-			{	
+			{
 				var reponse = XHR.responseText;
 				if(reponse == 'OK')
 				{
@@ -361,6 +360,9 @@ window.addEventListener('load',function()
 		if(window.app.readConfig()==null)
 			window.app.notify("EdT Bordeaux I","Pour une utilisation optimale, allez dans \"Options > Configuration\" et paramétrez votre groupe de TD.",20,null);
 	},3000);
+	setTimeout(function(){
+		window.app.notify("EdT Bordeaux I","\"Programme > Accueil\" permet d'accéder à la liste ou à votre emploi du temps si vous l'avez configuré.",30,null);
+	},10000);
 }, true);
 
 
